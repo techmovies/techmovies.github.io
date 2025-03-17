@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "434430065987",
+    "project_id": "techmovieshq",
+    "storage_bucket": "techmovieshq.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:434430065987:android:88e7013c1c0a76288603f6",
+        "android_client_info": {
+          "package_name": "com.pointsculture.fundrama"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB4ntfU5szkuYBfsTBqNlyWPZFx4XVBcvY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

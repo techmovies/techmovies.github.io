@@ -1,0 +1,14 @@
+{
+  "name": "vortex",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "node ./build.mjs"
+  },
+  "dependencies": {
+    "clean-css": "^5.3.3",
+    "javascript-obfuscator": "^4.1.0",
+    "terser": "^5.31.6"
+  }
+}

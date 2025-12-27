@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Detail - Vortex Streaming</title>
+    <meta name="description" content="Watch movies and TV shows in high quality on VORTEX Streaming. View details, seasons, and episodes.">
+    <meta name="keywords" content="movie detail, tv show detail, watch online, streaming, vortex streaming, seasons, episodes">
+    <meta name="robots" content="index,follow">
+    <meta name="theme-color" content="#101010">
+    <meta property="og:title" content="Movie Detail - Vortex Streaming">
+    <meta property="og:description" content="Watch movies and TV shows in high quality on VORTEX Streaming. View details, seasons, and episodes.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs/%3E%3Crect width='64' height='64' rx='14' fill='%23101010'/%3E%3Cpath d='M22 18h20a4 4 0 0 1 4 4v20a4 4 0 0 1-4 4H22a4 4 0 0 1-4-4V22a4 0 0 1 4-4zm7 8v12l12-6-12-6z' fill='%23ff6b6b'/%3E%3C/svg%3E">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Movie Detail - Vortex Streaming">
+    <meta name="twitter:description" content="Watch movies and TV shows in high quality on VORTEX Streaming. View details, seasons, and episodes.">
+    <meta name="twitter:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs/%3E%3Crect width='64' height='64' rx='14' fill='%23101010'/%3E%3Cpath d='M22 18h20a4 4 0 0 1 4 4v20a4 4 0 0 1-4 4H22a4 0 0 1-4-4V22a4 0 0 1 4-4zm7 8v12l12-6-12-6z' fill='%23ff6b6b'/%3E%3C/svg%3E">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs/%3E%3Crect width='64' height='64' rx='14' fill='%23101010'/%3E%3Cpath d='M22 18h20a4 4 0 0 1 4 4v20a4 4 0 0 1-4 4H22a4 0 0 1-4-4V22a4 0 0 1 4-4zm7 8v12l12-6-12-6z' fill='%23ff6b6b'/%3E%3C/svg%3E" type="image/svg+xml">
+    <link rel="manifest" href="manifest.json">
+    <link rel="preload" href="styles.min.css" as="style">
+    <link rel="preload" href="script.min.js" as="script">
+    <link rel="stylesheet" href="styles.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9097893369149135" crossorigin="anonymous"></script>
+</head>
+<body oncontextmenu="return false">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-logo">
+                <h1><i class="fas fa-film"></i> Vortex</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="movies.html" class="nav-link">Movies</a></li>
+                <li><a href="tvshows.html" class="nav-link">TV Shows</a></li>
+                <li><a href="trending.html" class="nav-link">Trending</a></li>
+                <li><a href="mylist.html" class="nav-link">My List</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" aria-label="Open menu" aria-expanded="false" type="button"><i class="fas fa-bars"></i></button>
+            <div class="nav-search">
+                <input type="text" class="search-input" placeholder="Search movies...">
+                <button class="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+            <button class="btn btn-secondary install-btn" id="install-btn" type="button" style="display: none;">
+                <i class="fas fa-download"></i> Install
+            </button>
+        </div>
+    </nav>
+
+    <!-- Movie Detail Section -->
+    <section class="movie-detail-section">
+        <div class="container">
+            <div class="movie-detail-container">
+                <!-- Movie Poster and Details -->
+                <div class="movie-main-info">
+                    <div class="movie-poster-container">
+                        <img id="movie-poster" src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80" alt="Movie Poster" class="movie-poster">
+                    </div>
+                    <div class="movie-info-container">
+                        <h1 id="movie-title" class="movie-title">PLURIBUS - SEASON 1</h1>
+                        <div class="movie-details-grid">
+                            <div class="detail-row">
+                                <span class="detail-label">QUALITY:</span>
+                                <span class="detail-value" id="movie-quality">HD</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">RELEASED:</span>
+                                <span class="detail-value" id="movie-released">2024</span>
+                            </div>
+                            <div class="detail-row" id="tv-seasons-row" style="display: none;">
+                                <span class="detail-label">SEASONS:</span>
+                                <span class="detail-value" id="movie-seasons">0</span>
+                            </div>
+                            <div class="detail-row" id="tv-episodes-row" style="display: none;">
+                                <span class="detail-label">EPISODES:</span>
+                                <span class="detail-value" id="movie-episodes">0</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">GENRE:</span>
+                                <span class="detail-value" id="movie-genre">Drama, Thriller</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">COUNTRY:</span>
+                                <span class="detail-value" id="movie-country">United States</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">CASTS:</span>
+                                <span class="detail-value" id="movie-casts">John Doe, Jane Smith, Robert Johnson</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Video Player Section -->
+                <div class="video-player-container">
+                    <h2 class="watch-title">WATCH <span id="video-title">PLURIBUS - SEASON 1</span> ONLINE FREE</h2>
+                    
+                    <!-- Video Player -->
+                    <div class="video-player">
+                        <iframe id="video-player" 
+                            src="" 
+                            frameborder="0" 
+                            allowfullscreen
+                            class="video-frame">
+                        </iframe>
+                    </div>
+
+                    <!-- Server Selection -->
+                    <div class="server-select">
+                        <h3>Select Server:</h3>
+                        <div class="server-buttons">
+                            <button class="server-btn active" data-server="1">Server 1</button>
+                            <button class="server-btn" data-server="2">Server 2</button>
+                            <button class="server-btn" data-server="3">Server 3</button>
+                        </div>
+                    </div>
+
+                    <!-- Episode Selection (for TV Shows) -->
+                    <div class="episode-selection" id="episode-section">
+                        <h3>Select Episode:</h3>
+                        <div class="episode-buttons">
+                            <button class="episode-btn active" data-episode="1">01</button>
+                            <button class="episode-btn" data-episode="2">02</button>
+                            <button class="episode-btn" data-episode="3">03</button>
+                            <button class="episode-btn" data-episode="4">04</button>
+                            <button class="episode-btn" data-episode="5">05</button>
+                            <button class="episode-btn" data-episode="6">06</button>
+                            <button class="episode-btn" data-episode="7">07</button>
+                            <button class="episode-btn" data-episode="8">08</button>
+                            <button class="episode-btn" data-episode="9">09</button>
+                        </div>
+                    </div>
+
+                    <!-- Synopsis Section -->
+                    <div class="synopsis-section">
+                        <h3>Synopsis</h3>
+                        <p id="movie-synopsis" class="synopsis-text">
+                            Pluribus follows the gripping story of a diverse group of individuals whose lives become intertwined through a series of unexpected events. As they navigate personal challenges and complex relationships, they discover that their choices have far-reaching consequences that affect not only themselves but everyone around them. This psychological thriller explores themes of identity, connection, and the ripple effects of human decisions in modern society.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recommendations Section -->
+    <section class="recommendations-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>YOU MAY ALSO LIKE</h2>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-type="similar">Similar Movies</button>
+                    <button class="filter-btn" data-type="genre">Same Genre</button>
+                    <button class="filter-btn" data-type="trending">Trending</button>
+                </div>
+            </div>
+            <div class="content-grid" id="recommendations-grid">
+                <!-- Recommendations will be dynamically added -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-tornado"></i>
+                        <span>VORTEX</span>
+                    </div>
+                    <p>Your ultimate streaming destination for movies and TV shows.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Translate</h4>
+                    <div id="google_translate_element"></div>
+                </div>
+                <div class="footer-section">
+                    <h4>Countries</h4>
+                    <div id="footer-countries"></div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Vortex Streaming. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        let currentServer = 1;
+        let currentSeason = 1;
+        let currentEpisode = 1;
+        const DEFAULT_COMURA_URL = 'https://comura.xyz/watch/?v18#ZE1PRHlCY2Vtdk55YmRFQ2V2K2krUzZnLy9iZDA3WlRsVUcyK1MvV21TUC9FN1p1b25BSUN5Y3diMzQ1L3dzVzZXWWtxZTloNVJNPQ';
+
+        function getSelectedMovie() {
+            return JSON.parse(sessionStorage.getItem('selectedMovie') || '{}');
+        }
+
+        function buildEmbedUrl(server, item, season = 1, episode = 1) {
+            if (!item) return '';
+
+            // Server 1: vidsrc-embed.ru (imdbId)
+            if (server === 1) {
+                return item.type === 'movie'
+                    ? `https://vidsrc-embed.ru/embed/movie/${item.imdbId}`
+                    : `https://vidsrc-embed.ru/embed/tv/${item.imdbId}/${season}/${episode}`;
+            }
+
+            // Server 2: 2embed.cc (tmdbId)
+            // Docs show: movie => /embed/{tmdbId}, tv => /embedtvfull/{tmdbId}
+            if (server === 2) {
+                if (!item.tmdbId) return buildEmbedUrl(1, item, season, episode);
+
+                return item.type === 'movie'
+                    ? `https://www.2embed.cc/embed/${item.tmdbId}`
+                    : `https://www.2embed.cc/embedtvfull/${item.tmdbId}?s=${season}&e=${episode}`;
+            }
+
+            // Server 3: vidsrc.cc (supports imdbId or tmdbId)
+            if (server === 3) {
+                const vidsrcId = item.imdbId || item.tmdbId;
+                if (!vidsrcId) return buildEmbedUrl(1, item, season, episode);
+
+                return item.type === 'movie'
+                    ? `https://vidsrc.cc/v3/embed/movie/${vidsrcId}`
+                    : `https://vidsrc.cc/v3/embed/tv/${vidsrcId}/${season}/${episode}`;
+            }
+
+            return buildEmbedUrl(1, item, season, episode);
+        }
+
+        function setVideoSource() {
+            const item = getSelectedMovie();
+            const iframe = document.getElementById('video-player');
+            if (!iframe) return;
+            if (!item?.imdbId && !item?.tmdbId) return;
+            iframe.src = buildEmbedUrl(currentServer, item, currentSeason, currentEpisode);
+        }
+
+        // Load movie data when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMovieDetail();
+            setupServerButtons();
+            setupEpisodeButtons();
+            loadRecommendations();
+        });
+
+        function loadMovieDetail() {
+            // Get movie data from sessionStorage or URL parameters
+            let movieData = sessionStorage.getItem('selectedMovie');
+            
+            if (movieData) {
+                const movie = JSON.parse(movieData);
+                populateMovieDetails(movie);
+                setupVideoPlayer(movie);
+                if (movie.type === 'tv-show') {
+                    loadTvShowEpisodes(movie);
+                }
+            } else {
+                // Fallback: try to get from URL parameters
+                const urlParams = new URLSearchParams(window.location.search);
+                const movieId = urlParams.get('id');
+                const movieType = urlParams.get('type');
+                
+                if (movieId && movieType) {
+                    // Try to find the movie in the global movieData (if available)
+                    // This would require the movieData to be accessible from this page
+                    // For now, show a placeholder
+                    showPlaceholderContent();
+                } else {
+                    showPlaceholderContent();
+                }
+            }
+        }
+
+        function populateMovieDetails(movie) {
+            // Update title
+            document.getElementById('movie-title').textContent = movie.title;
+            document.getElementById('video-title').textContent = movie.title.toUpperCase();
+            
+            // Update poster
+            document.getElementById('movie-poster').src = movie.image;
+            document.getElementById('movie-poster').alt = movie.title;
+            
+            // Update details
+            document.getElementById('movie-quality').textContent = movie.quality || 'HD';
+            document.getElementById('movie-released').textContent = movie.year || '2024';
+            document.getElementById('movie-genre').textContent = movie.genre || 'Action, Drama';
+            document.getElementById('movie-country').textContent = 'United States'; // Default
+            document.getElementById('movie-casts').textContent = 'Loading...'; // Could be enhanced with API
+
+            // TV counts
+            const seasonsRow = document.getElementById('tv-seasons-row');
+            const episodesRow = document.getElementById('tv-episodes-row');
+            if (seasonsRow) seasonsRow.style.display = 'none';
+            if (episodesRow) episodesRow.style.display = 'none';
+            
+            // Update synopsis
+            document.getElementById('movie-synopsis').textContent = movie.description || 
+                `Experience the thrilling story of ${movie.title}. This captivating production takes viewers on an unforgettable journey filled with drama, action, and suspense.`;
+            
+            // Update page title
+            document.title = `${movie.title} - Vortex Streaming`;
+            
+            // Show/hide episode section based on type
+            const episodeSection = document.getElementById('episode-section');
+            if (movie.type === 'tv-show') {
+                episodeSection.style.display = 'block';
+            } else {
+                episodeSection.style.display = 'none';
+            }
+        }
+
+        function setupVideoPlayer(movie) {
+            // Reset playback state
+            currentSeason = 1;
+            currentEpisode = 1;
+            currentServer = 1;
+
+            // Ensure server 1 is active by default
+            document.querySelectorAll('.server-btn').forEach(btn => btn.classList.remove('active'));
+            const server1 = document.querySelector('.server-btn[data-server="1"]');
+            if (server1) server1.classList.add('active');
+
+            setVideoSource();
+        }
+
+        function setupServerButtons() {
+            const serverButtons = document.querySelectorAll('.server-btn');
+            
+            serverButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    serverButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to clicked button
+                    this.classList.add('active');
+                    
+                    const serverNum = Number(this.dataset.server);
+                    currentServer = Number.isFinite(serverNum) ? serverNum : 1;
+                    setVideoSource();
+                });
+            });
+        }
+
+        function setupEpisodeButtons() {
+            const episodeSection = document.getElementById('episode-section');
+            if (!episodeSection) return;
+
+            const movieData = JSON.parse(sessionStorage.getItem('selectedMovie') || '{}');
+            if (movieData.type !== 'tv-show') return;
+
+            currentSeason = 1;
+            currentEpisode = 1;
+            setVideoSource();
+        }
+
+        async function resolveTmdbTvId(movie) {
+            const tmdb = window.__VORTEX_TMDB__;
+            if (!tmdb?.apiKey || !tmdb?.apiBase) return null;
+            const title = (movie?.title || '').trim();
+            if (!title) return null;
+
+            const url = new URL(`${tmdb.apiBase}/search/tv`);
+            url.searchParams.set('api_key', tmdb.apiKey);
+            url.searchParams.set('query', title);
+            if (movie?.year) {
+                url.searchParams.set('first_air_date_year', String(movie.year));
+            }
+
+            try {
+                const res = await fetch(url.toString());
+                if (!res.ok) return null;
+                const data = await res.json();
+                const first = Array.isArray(data?.results) ? data.results[0] : null;
+                if (!first?.id) return null;
+                return String(first.id);
+            } catch {
+                return null;
+            }
+        }
+
+        async function loadTvShowEpisodes(movie) {
+            const episodeSection = document.getElementById('episode-section');
+            if (!episodeSection) return;
+
+            const tmdb = window.__VORTEX_TMDB__;
+            if (!tmdb?.apiKey || !tmdb?.apiBase) {
+                return;
+            }
+
+            if (!movie?.tmdbId) {
+                const resolved = await resolveTmdbTvId(movie);
+                if (!resolved) return;
+                movie.tmdbId = resolved;
+                try {
+                    const stored = JSON.parse(sessionStorage.getItem('selectedMovie') || '{}');
+                    stored.tmdbId = resolved;
+                    sessionStorage.setItem('selectedMovie', JSON.stringify(stored));
+                } catch {
+                    // ignore
+                }
+            }
+
+            try {
+                const detailsUrl = `${tmdb.apiBase}/tv/${movie.tmdbId}?api_key=${encodeURIComponent(tmdb.apiKey)}`;
+                const detailsRes = await fetch(detailsUrl);
+                if (!detailsRes.ok) {
+                    const resolved = await resolveTmdbTvId(movie);
+                    if (!resolved || resolved === String(movie.tmdbId)) return;
+                    movie.tmdbId = resolved;
+                    try {
+                        const stored = JSON.parse(sessionStorage.getItem('selectedMovie') || '{}');
+                        stored.tmdbId = resolved;
+                        sessionStorage.setItem('selectedMovie', JSON.stringify(stored));
+                    } catch {
+                        // ignore
+                    }
+                    const retryRes = await fetch(`${tmdb.apiBase}/tv/${movie.tmdbId}?api_key=${encodeURIComponent(tmdb.apiKey)}`);
+                    if (!retryRes.ok) return;
+                    const retryDetails = await retryRes.json();
+                    await renderTvSeasonsAndEpisodes(movie, retryDetails, episodeSection);
+                    return;
+                }
+                const details = await detailsRes.json();
+
+                await renderTvSeasonsAndEpisodes(movie, details, episodeSection);
+            } catch (e) {
+                console.warn('Failed to load TV show episodes', e);
+            }
+        }
+
+        async function renderTvSeasonsAndEpisodes(movie, details, episodeSection) {
+            const tmdb = window.__VORTEX_TMDB__;
+            const seasons = Array.isArray(details.seasons) ? details.seasons.filter(s => s && s.season_number > 0) : [];
+            const totalSeasons = details.number_of_seasons || seasons.length || 0;
+            const totalEpisodes = details.number_of_episodes || 0;
+
+            const seasonsRow = document.getElementById('tv-seasons-row');
+            const episodesRow = document.getElementById('tv-episodes-row');
+            const seasonsValue = document.getElementById('movie-seasons');
+            const episodesValue = document.getElementById('movie-episodes');
+            if (seasonsValue) seasonsValue.textContent = String(totalSeasons);
+            if (episodesValue) episodesValue.textContent = String(totalEpisodes);
+            if (seasonsRow) seasonsRow.style.display = '';
+            if (episodesRow) episodesRow.style.display = '';
+
+            const buttonsContainer = episodeSection.querySelector('.episode-buttons');
+            if (!buttonsContainer) return;
+
+            const seasonRow = document.createElement('div');
+            seasonRow.className = 'season-row';
+
+            const seasonButtons = document.createElement('div');
+            seasonButtons.className = 'season-buttons';
+
+            const seasonInfo = document.createElement('div');
+            seasonInfo.className = 'season-info';
+            seasonInfo.style.cssText = 'margin-top: 10px; color: #e8e8e8; font-size: 14px;';
+            seasonInfo.textContent = (totalSeasons || totalEpisodes)
+                ? `${totalSeasons ? `Total Seasons: ${totalSeasons}` : ''}${totalSeasons && totalEpisodes ? ' • ' : ''}${totalEpisodes ? `Total Episodes: ${totalEpisodes}` : ''}`
+                : '';
+
+            seasonRow.appendChild(seasonButtons);
+            buttonsContainer.innerHTML = '';
+            buttonsContainer.appendChild(seasonRow);
+            buttonsContainer.appendChild(seasonInfo);
+
+            const setSeasonActive = (seasonNumber) => {
+                seasonButtons.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+                const active = seasonButtons.querySelector(`button[data-season="${seasonNumber}"]`);
+                if (active) active.classList.add('active');
+            };
+
+            const renderEpisodes = async (seasonNumber) => {
+                const seasonUrl = `${tmdb.apiBase}/tv/${movie.tmdbId}/season/${seasonNumber}?api_key=${encodeURIComponent(tmdb.apiKey)}`;
+                const seasonRes = await fetch(seasonUrl);
+                if (!seasonRes.ok) return;
+                const seasonData = await seasonRes.json();
+
+                const episodes = Array.isArray(seasonData.episodes) ? seasonData.episodes : [];
+                const episodesCount = episodes.length;
+
+                seasonInfo.textContent = `Season ${seasonNumber} • ${episodesCount} episodes${totalEpisodes ? ` • Total ${totalEpisodes}` : ''}`;
+
+                const episodeGrid = document.createElement('div');
+                episodeGrid.className = 'episode-grid';
+                episodeGrid.style.cssText = 'display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:15px;';
+
+                episodes.forEach((ep) => {
+                    const epBtn = document.createElement('button');
+                    epBtn.className = 'episode-btn';
+                    epBtn.textContent = String(ep.episode_number).padStart(2, '0');
+                    epBtn.dataset.episode = ep.episode_number;
+                    epBtn.addEventListener('click', () => {
+                        episodeGrid.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+                        epBtn.classList.add('active');
+
+                        currentSeason = seasonNumber;
+                        currentEpisode = ep.episode_number;
+                        setVideoSource();
+                    });
+                    episodeGrid.appendChild(epBtn);
+                });
+
+                const existing = buttonsContainer.querySelector('.episode-grid');
+                if (existing) existing.remove();
+                buttonsContainer.appendChild(episodeGrid);
+
+                const firstEp = episodeGrid.querySelector('button');
+                if (firstEp) firstEp.classList.add('active');
+            };
+
+            seasons.forEach((s) => {
+                const btn = document.createElement('button');
+                btn.className = 'season-btn';
+                btn.textContent = `S${String(s.season_number).padStart(2, '0')}`;
+                btn.dataset.season = s.season_number;
+                btn.addEventListener('click', async () => {
+                    setSeasonActive(s.season_number);
+                    await renderEpisodes(s.season_number);
+                    const firstEpisodeBtn = buttonsContainer.querySelector('.episode-grid .episode-btn.active') || buttonsContainer.querySelector('.episode-grid .episode-btn');
+                    const firstEpNum = firstEpisodeBtn ? Number(firstEpisodeBtn.dataset.episode) : 1;
+                    currentSeason = s.season_number;
+                    currentEpisode = firstEpNum;
+                    setVideoSource();
+                });
+                seasonButtons.appendChild(btn);
+            });
+
+            const firstSeasonNumber = seasons[0]?.season_number || 1;
+            setSeasonActive(firstSeasonNumber);
+            await renderEpisodes(firstSeasonNumber);
+
+            currentSeason = firstSeasonNumber;
+            currentEpisode = 1;
+            setVideoSource();
+        }
+
+        function loadRecommendations() {
+            const recommendationsGrid = document.getElementById('recommendations-grid');
+            const tmdb = window.__VORTEX_TMDB__;
+            const selected = JSON.parse(sessionStorage.getItem('selectedMovie') || '{}');
+
+            if (!recommendationsGrid) return;
+            recommendationsGrid.innerHTML = '<div class="loading">Loading recommendations...</div>';
+
+            if (!tmdb?.apiKey || !tmdb?.apiBase) {
+                recommendationsGrid.innerHTML = '<div class="error">Recommendations unavailable.</div>';
+                return;
+            }
+
+            if (!selected?.tmdbId || !selected?.type) {
+                recommendationsGrid.innerHTML = '<div class="error">Recommendations unavailable.</div>';
+                return;
+            }
+
+            setupRecommendationFilters();
+            loadRecommendationType('similar');
+        }
+
+        function setupRecommendationFilters() {
+            const filterBtns = document.querySelectorAll('.recommendations-section .filter-btn');
+            filterBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    filterBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    const type = btn.dataset.type;
+                    loadRecommendationType(type);
+                });
+            });
+        }
+
+        async function loadRecommendationType(type) {
+            const recommendationsGrid = document.getElementById('recommendations-grid');
+            const tmdb = window.__VORTEX_TMDB__;
+            const selected = JSON.parse(sessionStorage.getItem('selectedMovie') || '{}');
+            if (!recommendationsGrid || !tmdb?.apiKey || !tmdb?.apiBase || !selected?.tmdbId) return;
+
+            recommendationsGrid.innerHTML = '<div class="loading">Loading recommendations...</div>';
+
+            const endpointType = selected.type === 'tv-show' ? 'tv' : 'movie';
+            const route = type === 'trending'
+                ? `${tmdb.apiBase}/trending/${endpointType}/week?api_key=${encodeURIComponent(tmdb.apiKey)}`
+                : `${tmdb.apiBase}/${endpointType}/${selected.tmdbId}/${type === 'genre' ? 'recommendations' : type}?api_key=${encodeURIComponent(tmdb.apiKey)}`;
+
+            try {
+                const res = await fetch(route);
+                if (!res.ok) throw new Error('failed');
+                const data = await res.json();
+                const items = Array.isArray(data.results) ? data.results.slice(0, 12) : [];
+
+                const mapped = await Promise.all(items.map(async (it) => {
+                    const rec = {
+                        id: String(it.id),
+                        tmdbId: String(it.id),
+                        title: it.title || it.name || 'Untitled',
+                        type: selected.type,
+                        year: (it.release_date || it.first_air_date || '').slice(0, 4) || '',
+                        rating: typeof it.vote_average === 'number' ? Number(it.vote_average.toFixed(1)) : 0,
+                        genre: '',
+                        description: it.overview || '',
+                        image: it.poster_path ? `https://image.tmdb.org/t/p/w500${it.poster_path}` : 'https://picsum.photos/seed/reco/500/750.jpg',
+                        imdbId: null
+                    };
+
+                    rec.imdbId = await fetchImdbIdForRecommendation(selected.type, rec.tmdbId);
+                    return rec;
+                }));
+
+                window.__VORTEX_LAST_RECOMMENDATIONS__ = mapped;
+
+                recommendationsGrid.innerHTML = '';
+                if (mapped.length === 0) {
+                    recommendationsGrid.innerHTML = '<div class="no-results">No recommendations found.</div>';
+                    return;
+                }
+
+                mapped.forEach(item => {
+                    recommendationsGrid.appendChild(createRecommendationCard(item));
+                });
+            } catch {
+                recommendationsGrid.innerHTML = '<div class="error">Failed to load recommendations.</div>';
+            }
+        }
+
+        async function fetchImdbIdForRecommendation(type, tmdbId) {
+            const tmdb = window.__VORTEX_TMDB__;
+            if (!tmdb?.apiKey || !tmdb?.apiBase || !tmdbId) return null;
+
+            const cacheKey = `vortexExternalIds:${type}:${tmdbId}`;
+            try {
+                const cached = sessionStorage.getItem(cacheKey);
+                if (cached) return cached === 'null' ? null : cached;
+            } catch {
+                // ignore
+            }
+
+            try {
+                const endpointType = type === 'tv-show' ? 'tv' : 'movie';
+                const url = `${tmdb.apiBase}/${endpointType}/${tmdbId}/external_ids?api_key=${encodeURIComponent(tmdb.apiKey)}`;
+                const res = await fetch(url);
+                if (!res.ok) return null;
+                const data = await res.json();
+                const imdbId = data?.imdb_id || null;
+                try {
+                    sessionStorage.setItem(cacheKey, imdbId || 'null');
+                } catch {
+                    // ignore
+                }
+                return imdbId;
+            } catch {
+                return null;
+            }
+        }
+
+        function createRecommendationCard(item) {
+            const card = document.createElement('div');
+            card.className = 'content-card';
+            card.innerHTML = `
+                <img src="${item.image}" alt="${item.title}" loading="lazy">
+                <div class="content-rating">
+                    <i class="fas fa-star"></i> ${item.rating}
+                </div>
+                <div class="content-card-overlay">
+                    <div class="content-card-info">
+                        <h3>${item.title}</h3>
+                        <p>${item.year}</p>
+                        <div class="content-card-actions">
+                            <button class="content-card-btn watch-btn" onclick="watchRecommendation('${item.tmdbId}')">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button class="content-card-btn add-btn" onclick="addToList('${item.tmdbId}')">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            card.addEventListener('click', () => {
+                watchRecommendation(item.tmdbId);
+            });
+            
+            return card;
+        }
+
+        function watchRecommendation(itemId) {
+            const list = window.__VORTEX_LAST_RECOMMENDATIONS__;
+            if (!Array.isArray(list)) {
+                showNotification('Loading recommendation...');
+                return;
+            }
+
+            const selectedItem = list.find(x => String(x.tmdbId) === String(itemId));
+            if (!selectedItem) {
+                showNotification('Loading recommendation...');
+                return;
+            }
+
+            if (!selectedItem.imdbId) {
+                showNotification('This title cannot be played right now.');
+                return;
+            }
+
+            sessionStorage.setItem('selectedMovie', JSON.stringify(selectedItem));
+            window.location.href = `movie-detail.html?id=${selectedItem.imdbId}&type=${selectedItem.type}`;
+        }
+
+        function addToList(itemId) {
+            showNotification('Added to your list!');
+        }
+
+        function showPlaceholderContent() {
+            // Show default content if no movie data is available
+            document.getElementById('movie-title').textContent = 'Movie Title';
+            document.getElementById('video-title').textContent = 'MOVIE TITLE';
+            document.getElementById('movie-quality').textContent = 'HD';
+            document.getElementById('movie-released').textContent = '2024';
+            document.getElementById('movie-genre').textContent = 'Action, Drama';
+            document.getElementById('movie-country').textContent = 'United States';
+            document.getElementById('movie-casts').textContent = 'Actor 1, Actor 2, Actor 3';
+            document.getElementById('movie-synopsis').textContent = 'Movie description will appear here when you select a movie from the main pages.';
+        }
+
+        function showNotification(message) {
+            // Simple notification system
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #ff6b6b;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+    <script src="script.min.js" defer></script>
+</body>
+</html>

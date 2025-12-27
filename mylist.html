@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My List - Vortex Streaming</title>
+    <meta name="description" content="Manage your personal watchlist on VORTEX Streaming. Save and quickly access your favorite movies and TV shows.">
+    <meta name="keywords" content="my list, watchlist, saved movies, saved tv shows, personal list, vortex streaming">
+    <meta name="robots" content="index,follow">
+    <meta name="theme-color" content="#101010">
+    <meta property="og:title" content="My List - Vortex Streaming">
+    <meta property="og:description" content="Manage your personal watchlist on VORTEX Streaming. Save and quickly access your favorite movies and TV shows.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs/%3E%3Crect width='64' height='64' rx='14' fill='%23101010'/%3E%3Cpath d='M22 18h20a4 4 0 0 1 4 4v20a4 4 0 0 1-4 4H22a4 4 0 0 1-4-4V22a4 0 0 1 4-4zm7 8v12l12-6-12-6z' fill='%23ff6b6b'/%3E%3C/svg%3E">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="My List - Vortex Streaming">
+    <meta name="twitter:description" content="Browse and manage your watchlist on VORTEX Streaming. Save and quickly access your favorite movies and TV shows.">
+    <meta name="twitter:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs/%3E%3Crect width='64' height='64' rx='14' fill='%23101010'/%3E%3Cpath d='M22 18h20a4 4 0 0 1 4 4v20a4 4 0 0 1-4 4H22a4 0 0 1-4-4V22a4 0 0 1 4-4zm7 8v12l12-6-12-6z' fill='%23ff6b6b'/%3E%3C/svg%3E">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs/%3E%3Crect width='64' height='64' rx='14' fill='%23101010'/%3E%3Cpath d='M22 18h20a4 4 0 0 1 4 4v20a4 4 0 0 1-4 4H22a4 0 0 1-4-4V22a4 0 0 1 4-4zm7 8v12l12-6-12-6z' fill='%23ff6b6b'/%3E%3C/svg%3E" type="image/svg+xml">
+    <link rel="manifest" href="manifest.json">
+    <link rel="preload" href="styles.min.css" as="style">
+    <link rel="preload" href="script.min.js" as="script">
+    <link rel="stylesheet" href="styles.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9097893369149135" crossorigin="anonymous"></script>
+</head>
+<body oncontextmenu="return false">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-logo">
+                <h1><i class="fas fa-film"></i> Vortex</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="movies.html" class="nav-link">Movies</a></li>
+                <li><a href="tvshows.html" class="nav-link">TV Shows</a></li>
+                <li><a href="trending.html" class="nav-link">Trending</a></li>
+                <li><a href="mylist.html" class="nav-link active">My List</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" aria-label="Open menu" aria-expanded="false" type="button"><i class="fas fa-bars"></i></button>
+            <div class="nav-search">
+                <input type="text" class="search-input" placeholder="Search your list...">
+                <button class="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+            <button class="btn btn-secondary install-btn" id="install-btn" type="button" style="display: none;">
+                <i class="fas fa-download"></i> Install
+            </button>
+        </div>
+    </nav>
+
+    <!-- My List Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="header-content">
+                <h1>My List</h1>
+                <p>Your personal collection of movies and TV shows</p>
+                <div class="list-stats">
+                    <span class="stat-item">
+                        <i class="fas fa-film"></i>
+                        <span id="movies-count">0</span> Movies
+                    </span>
+                    <span class="stat-item">
+                        <i class="fas fa-tv"></i>
+                        <span id="tvshows-count">0</span> TV Shows
+                    </span>
+                    <span class="stat-item">
+                        <i class="fas fa-heart"></i>
+                        <span id="total-count">0</span> Total
+                    </span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filter and Sort Section -->
+    <section class="filter-section">
+        <div class="container">
+            <div class="filter-controls">
+                <div class="filter-group">
+                    <label>Filter by Type:</label>
+                    <div class="filter-buttons">
+                        <button class="filter-btn active" data-filter="all">All</button>
+                        <button class="filter-btn" data-filter="movie">Movies</button>
+                        <button class="filter-btn" data-filter="tv-show">TV Shows</button>
+                    </div>
+                </div>
+                <div class="filter-group">
+                    <label>Sort by:</label>
+                    <select class="sort-select" id="sort-select">
+                        <option value="date-added">Date Added</option>
+                        <option value="title">Title</option>
+                        <option value="year">Year</option>
+                        <option value="rating">Rating</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <button class="btn btn-outline" id="clear-list-btn">
+                        <i class="fas fa-trash"></i> Clear List
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- My List Content -->
+    <section class="content-section">
+        <div class="container">
+            <!-- Empty State -->
+            <div id="empty-state" class="empty-state">
+                <div class="empty-icon">
+                    <i class="fas fa-bookmark"></i>
+                </div>
+                <h2>Your list is empty</h2>
+                <p>Start adding movies and TV shows to your list to see them here</p>
+                <a href="index.html" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Browse Content
+                </a>
+            </div>
+
+            <!-- Content Grid -->
+            <div id="mylist-grid" class="content-grid">
+                <!-- List items will be dynamically added -->
+            </div>
+
+            <!-- Pagination (if needed) -->
+            <div class="pagination-controls" id="list-pagination" style="display: none;">
+                <div class="pagination-info">
+                    <span id="list-page-info">Page 1 of 1</span>
+                    <span id="list-total-info">Total: 0 items</span>
+                </div>
+                <div class="pagination-buttons">
+                    <button class="pagination-btn" id="list-prev-btn" disabled>
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </button>
+                    <div class="pagination-numbers" id="list-page-numbers">
+                        <!-- Page numbers will be dynamically added -->
+                    </div>
+                    <button class="pagination-btn" id="list-next-btn" disabled>
+                        Next <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-tornado"></i>
+                        <span>VORTEX</span>
+                    </div>
+                    <p>Your ultimate streaming destination for movies and TV shows.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Translate</h4>
+                    <div id="google_translate_element"></div>
+                </div>
+                <div class="footer-section">
+                    <h4>Countries</h4>
+                    <div id="footer-countries"></div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Vortex Streaming. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // My List functionality
+        let myList = [];
+        let currentFilter = 'all';
+        let currentSort = 'date-added';
+        let currentPage = 1;
+        const itemsPerPage = 5000;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadMyList();
+            setupEventListeners();
+        });
+
+        async function loadMyList() {
+            // Option B: show full catalog similar to Trending
+            try {
+                if (typeof fetchMovies === 'function' && typeof fetchTVShows === 'function') {
+                    const [movies, tvShows] = await Promise.all([
+                        fetchMovies(1, 50),
+                        fetchTVShows(1, 50)
+                    ]);
+                    myList = []
+                        .concat(Array.isArray(movies) ? movies : [])
+                        .concat(Array.isArray(tvShows) ? tvShows : []);
+                } else if (typeof getFallbackData === 'function') {
+                    myList = getFallbackData();
+                }
+            } catch (e) {
+                if (typeof getFallbackData === 'function') {
+                    myList = getFallbackData();
+                }
+            }
+
+            updateStats();
+            renderList();
+        }
+
+        function saveMyList() {
+            localStorage.setItem('vortexWatchlist', JSON.stringify(myList));
+            updateStats();
+        }
+
+        function updateStats() {
+            const movies = myList.filter(item => item.type === 'movie');
+            const tvShows = myList.filter(item => item.type === 'tv-show');
+            
+            document.getElementById('movies-count').textContent = movies.length;
+            document.getElementById('tvshows-count').textContent = tvShows.length;
+            document.getElementById('total-count').textContent = myList.length;
+        }
+
+        function renderList() {
+            const grid = document.getElementById('mylist-grid');
+            const emptyState = document.getElementById('empty-state');
+            const pagination = document.getElementById('list-pagination');
+            
+            // Filter and sort the list
+            let filteredList = filterList(myList, currentFilter);
+            filteredList = sortList(filteredList, currentSort);
+            
+            if (filteredList.length === 0) {
+                emptyState.style.display = 'block';
+                grid.style.display = 'none';
+                pagination.style.display = 'none';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            grid.style.display = 'grid';
+            
+            // Catalog view: keep pagination hidden
+            pagination.style.display = 'none';
+            
+            // Get current page items
+            const startIndex = (currentPage - 1) * itemsPerPage;
+            const endIndex = startIndex + itemsPerPage;
+            const pageItems = filteredList.slice(startIndex, endIndex);
+            
+            // Render items
+            grid.innerHTML = '';
+            pageItems.forEach(item => {
+                if (typeof createContentCard === 'function') {
+                    grid.appendChild(createContentCard(item));
+                } else {
+                    const card = createListItemCard(item);
+                    grid.appendChild(card);
+                }
+            });
+        }
+
+        function createListItemCard(item) {
+            const card = document.createElement('div');
+            card.className = 'content-card';
+            card.innerHTML = `
+                <img src="${item.image}" alt="${item.title}" loading="lazy">
+                <div class="content-rating">
+                    <i class="fas fa-star"></i> ${item.rating}
+                </div>
+                <div class="content-type-badge">
+                    <i class="fas fa-${item.type === 'movie' ? 'film' : 'tv'}"></i>
+                    ${item.type === 'movie' ? 'Movie' : 'TV Show'}
+                </div>
+                <div class="content-card-overlay">
+                    <div class="content-card-info">
+                        <h3>${item.title}</h3>
+                        <p>${item.year} • ${item.genre}</p>
+                        <div class="content-card-actions">
+                            <button class="content-card-btn watch-btn" onclick="watchFromList('${item.id}')">
+                                <i class="fas fa-play"></i>
+                            </button>
+                            <button class="content-card-btn remove-btn" onclick="removeFromList('${item.id}')">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            card.addEventListener('click', () => {
+                watchFromList(item.id);
+            });
+            
+            return card;
+        }
+
+        function filterList(list, filter) {
+            if (filter === 'all') return list;
+            return list.filter(item => item.type === filter);
+        }
+
+        function sortList(list, sort) {
+            const sortedList = [...list];
+            
+            switch(sort) {
+                case 'title':
+                    return sortedList.sort((a, b) => a.title.localeCompare(b.title));
+                case 'year':
+                    return sortedList.sort((a, b) => b.year - a.year);
+                case 'rating':
+                    return sortedList.sort((a, b) => b.rating - a.rating);
+                case 'date-added':
+                default:
+                    return sortedList.sort((a, b) => (b.addedDate || 0) - (a.addedDate || 0));
+            }
+        }
+
+        function setupEventListeners() {
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    currentFilter = this.dataset.filter;
+                    currentPage = 1;
+                    renderList();
+                });
+            });
+            
+            // Sort select
+            document.getElementById('sort-select').addEventListener('change', function() {
+                currentSort = this.value;
+                currentPage = 1;
+                renderList();
+            });
+            
+            // Clear list button
+            document.getElementById('clear-list-btn').addEventListener('click', function() {
+                if (confirm('Are you sure you want to clear your saved watchlist? This action cannot be undone.')) {
+                    localStorage.removeItem('vortexWatchlist');
+                    showNotification('Your watchlist has been cleared');
+                }
+            });
+            
+            // Search functionality - use global search
+            const searchInput = document.querySelector('.search-input');
+            const searchBtn = document.querySelector('.search-btn');
+            
+            searchBtn.addEventListener('click', function() {
+                performMyListSearch();
+            });
+            
+            searchInput.addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') {
+                    performMyListSearch();
+                }
+            });
+            
+            function performMyListSearch() {
+                const query = searchInput.value.toLowerCase().trim();
+                if (query === '') {
+                    renderList();
+                    return;
+                }
+                
+                const grid = document.getElementById('mylist-grid');
+                const emptyState = document.getElementById('empty-state');
+                
+                // Filter the current list
+                const filtered = myList.filter(item => 
+                    item.title.toLowerCase().includes(query) ||
+                    item.genre.toLowerCase().includes(query) ||
+                    (item.year && item.year.toString().includes(query))
+                );
+                
+                if (filtered.length > 0) {
+                    emptyState.style.display = 'none';
+                    grid.style.display = 'grid';
+                    grid.innerHTML = '';
+                    filtered.forEach(item => {
+                        const card = createListItemCard(item);
+                        grid.appendChild(card);
+                    });
+                    showNotification(`Found ${filtered.length} results for "${query}"`);
+                } else {
+                    emptyState.style.display = 'block';
+                    grid.style.display = 'none';
+                    emptyState.innerHTML = `
+                        <div class="empty-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h2>No results found</h2>
+                        <p>No items found for "${query}" in your list</p>
+                    `;
+                }
+            }
+        }
+
+        function updatePagination(totalItems, totalPages) {
+            document.getElementById('list-page-info').textContent = `Page ${currentPage} of ${totalPages}`;
+            document.getElementById('list-total-info').textContent = `Total: ${totalItems} items`;
+            
+            // Update page numbers
+            const pageNumbers = document.getElementById('list-page-numbers');
+            pageNumbers.innerHTML = '';
+            
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                    const pageBtn = document.createElement('button');
+                    pageBtn.className = 'pagination-number';
+                    pageBtn.textContent = i;
+                    if (i === currentPage) pageBtn.classList.add('active');
+                    pageBtn.addEventListener('click', () => {
+                        currentPage = i;
+                        renderList();
+                    });
+                    pageNumbers.appendChild(pageBtn);
+                }
+            }
+            
+            // Update prev/next buttons
+            document.getElementById('list-prev-btn').disabled = currentPage === 1;
+            document.getElementById('list-next-btn').disabled = currentPage === totalPages;
+            
+            document.getElementById('list-prev-btn').onclick = () => {
+                if (currentPage > 1) {
+                    currentPage--;
+                    renderList();
+                }
+            };
+            
+            document.getElementById('list-next-btn').onclick = () => {
+                if (currentPage < totalPages) {
+                    currentPage++;
+                    renderList();
+                }
+            };
+        }
+
+        function watchFromList(itemId) {
+            const item = myList.find(i => i.id === itemId);
+            if (item) {
+                // Store in sessionStorage and navigate to detail page
+                sessionStorage.setItem('selectedMovie', JSON.stringify(item));
+                window.location.href = `movie-detail.html?id=${item.id}&type=${item.type}`;
+            }
+        }
+
+        function removeFromList(itemId) {
+            const index = myList.findIndex(item => item.id === itemId);
+            if (index > -1) {
+                const item = myList[index];
+                myList.splice(index, 1);
+                saveMyList();
+                renderList();
+                showNotification(`${item.title} removed from your list`);
+            }
+        }
+
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.textContent = message;
+            notification.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: #ff6b6b;
+                color: white;
+                padding: 15px 20px;
+                border-radius: 8px;
+                z-index: 10000;
+                animation: slideIn 0.3s ease;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+    <script src="script.min.js" defer></script>
+</body>
+</html>

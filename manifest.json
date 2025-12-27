@@ -1,0 +1,18 @@
+{
+  "name": "VORTEX Streaming",
+  "short_name": "VORTEX",
+  "description": "Watch movies & TV shows online with VORTEX Streaming.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#101010",
+  "theme_color": "#101010",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

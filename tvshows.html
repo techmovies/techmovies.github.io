@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TV Shows - Vortex Streaming</title>
+    <meta name="description" content="Browse and watch TV shows online on VORTEX Streaming. Stream the latest TV series in high quality.">
+    <meta name="keywords" content="tv shows, watch tv shows online, streaming tv shows, vortex streaming, latest tv series, binge watch">
+    <meta name="robots" content="index,follow">
+    <meta name="theme-color" content="#101010">
+    <meta property="og:title" content="TV Shows - Vortex Streaming">
+    <meta property="og:description" content="Browse and watch TV shows online on VORTEX Streaming. Stream the latest TV series in high quality.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs/%3E%3Crect width='64' height='64' rx='14' fill='%23101010'/%3E%3Cpath d='M22 18h20a4 4 0 0 1 4 4v20a4 4 0 0 1-4 4H22a4 4 0 0 1-4-4V22a4 0 0 1 4-4zm7 8v12l12-6-12-6z' fill='%23ff6b6b'/%3E%3C/svg%3E">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="TV Shows - Vortex Streaming">
+    <meta name="twitter:description" content="Browse and watch TV shows online on VORTEX Streaming. Stream the latest TV series in high quality.">
+    <meta name="twitter:image" content="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs/%3E%3Crect width='64' height='64' rx='14' fill='%23101010'/%3E%3Cpath d='M22 18h20a4 4 0 0 1 4 4v20a4 4 0 0 1-4 4H22a4 0 0 1-4-4V22a4 0 0 1 4-4zm7 8v12l12-6-12-6z' fill='%23ff6b6b'/%3E%3C/svg%3E">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs/%3E%3Crect width='64' height='64' rx='14' fill='%23101010'/%3E%3Cpath d='M22 18h20a4 4 0 0 1 4 4v20a4 4 0 0 1-4 4H22a4 0 0 1-4-4V22a4 0 0 1 4-4zm7 8v12l12-6-12-6z' fill='%23ff6b6b'/%3E%3C/svg%3E" type="image/svg+xml">
+    <link rel="manifest" href="manifest.json">
+    <link rel="preload" href="styles.min.css" as="style">
+    <link rel="preload" href="script.min.js" as="script">
+    <link rel="stylesheet" href="styles.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9097893369149135" crossorigin="anonymous"></script>
+</head>
+<body oncontextmenu="return false">
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-logo">
+                <h1><i class="fas fa-film"></i> Vortex</h1>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Home</a></li>
+                <li><a href="movies.html" class="nav-link">Movies</a></li>
+                <li><a href="tvshows.html" class="nav-link active">TV Shows</a></li>
+                <li><a href="trending.html" class="nav-link">Trending</a></li>
+                <li><a href="mylist.html" class="nav-link">My List</a></li>
+            </ul>
+            <button class="mobile-menu-toggle" aria-label="Open menu" aria-expanded="false" type="button"><i class="fas fa-bars"></i></button>
+            <div class="nav-search">
+                <input type="text" class="search-input" placeholder="Search TV shows...">
+                <button class="search-btn"><i class="fas fa-search"></i></button>
+            </div>
+            <button class="btn btn-secondary install-btn" id="install-btn" type="button" style="display: none;">
+                <i class="fas fa-download"></i> Install
+            </button>
+        </div>
+    </nav>
+
+    <!-- TV Shows Header -->
+    <section class="page-header">
+        <div class="container">
+            <div class="header-content">
+                <h1>All TV Shows</h1>
+                <p>Explore our complete collection of 19,704 TV shows</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- TV Shows Section -->
+    <section id="tv-shows" class="content-section">
+        <div class="container">
+            <div class="section-header">
+                <h2>TV Shows</h2>
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-genre="all">All</button>
+                    <button class="filter-btn" data-genre="drama">Drama</button>
+                    <button class="filter-btn" data-genre="comedy">Comedy</button>
+                    <button class="filter-btn" data-genre="action">Action</button>
+                    <button class="filter-btn" data-genre="thriller">Thriller</button>
+                </div>
+            </div>
+            <div class="content-grid" id="tv-shows-grid">
+                <!-- Content will be dynamically added -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Pagination Controls -->
+    <div class="pagination-controls" id="unified-pagination">
+        <div class="pagination-info">
+            <span id="current-section-info">TV Shows</span>
+            <span id="page-info">Page 1 of 394</span>
+            <span id="total-info">Total: 19,704 TV shows</span>
+        </div>
+        <div class="pagination-buttons">
+            <button class="pagination-btn" id="prev-btn" disabled>
+                <i class="fas fa-chevron-left"></i> Previous
+            </button>
+            <div class="pagination-numbers" id="page-numbers">
+                <!-- Page numbers will be dynamically added -->
+            </div>
+            <button class="pagination-btn" id="next-btn">
+                Next <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Video Player Modal -->
+    <div id="video-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div class="video-container">
+                <!-- iframe will be dynamically inserted here -->
+            </div>
+            <div class="video-info">
+                <h3 id="video-title"></h3>
+                <p id="video-description"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-tornado"></i>
+                        <span>VORTEX</span>
+                    </div>
+                    <p>Your ultimate streaming destination for movies and TV shows.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Press</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Follow Us</h4>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                <div class="footer-section">
+                    <h4>Translate</h4>
+                    <div id="google_translate_element"></div>
+                </div>
+                <div class="footer-section">
+                    <h4>Countries</h4>
+                    <div id="footer-countries"></div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 Vortex Streaming. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.min.js" defer></script>
+</body>
+</html>

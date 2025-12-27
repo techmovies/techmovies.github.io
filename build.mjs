@@ -5,11 +5,15 @@ import JavaScriptObfuscator from 'javascript-obfuscator';
 import CleanCSS from 'clean-css';
 
 const root = process.cwd();
+const distDir = path.join(root, 'dist');
 
 const inJs = path.join(root, 'script.js');
 const inCss = path.join(root, 'styles.css');
-const outJs = path.join(root, 'script.min.js');
-const outCss = path.join(root, 'styles.min.css');
+const outJs = path.join(distDir, 'script.min.js');
+const outCss = path.join(distDir, 'styles.min.css');
+
+// Ensure dist directory exists
+await fs.mkdir(distDir, { recursive: true });
 
 async function buildJs() {
   const js = await fs.readFile(inJs, 'utf8');

@@ -237,13 +237,13 @@
             }
 
             // Server 2: 2embed.cc (tmdbId)
-            // Docs show: movie => /embed/{tmdbId}, tv => /embedtvfull/{tmdbId}
+            // Docs show: movie => /embed/{tmdbId}, tv => /embedtv/{tmdbId}
             if (server === 2) {
                 if (!item.tmdbId) return buildEmbedUrl(1, item, season, episode);
 
                 return item.type === 'movie'
                     ? `https://www.2embed.cc/embed/${item.tmdbId}`
-                    : `https://www.2embed.cc/embedtvfull/${item.tmdbId}?s=${season}&e=${episode}`;
+                    : `https://www.2embed.cc/embedtv/${item.tmdbId}?s=${season}&e=${episode}`;
             }
 
             // Server 3: vidsrc.cc (supports imdbId or tmdbId)
@@ -264,7 +264,11 @@
             const iframe = document.getElementById('video-player');
             if (!iframe) return;
             if (!item?.imdbId && !item?.tmdbId) return;
-            iframe.src = buildEmbedUrl(currentServer, item, currentSeason, currentEpisode);
+            // Force reload by clearing src first (busts iframe cache)
+            iframe.src = '';
+            setTimeout(() => {
+                iframe.src = buildEmbedUrl(currentServer, item, currentSeason, currentEpisode);
+            }, 50);
         }
 
         // Load movie data when page loads

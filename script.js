@@ -16,6 +16,24 @@ let deferredInstallPrompt = null;
 
 let __vortexTranslateLoaded = false;
 
+// Network connectivity monitoring
+let networkInfo = {
+    online: navigator.onLine,
+    connectionType: 'unknown',
+    effectiveType: 'unknown',
+    downlink: 0,
+    rtt: 0
+};
+
+// Adaptive loading settings
+const adaptiveSettings = {
+    'slow-2g': { posterQuality: 'w92', itemsPerPage: 10, enableLazy: true },
+    '2g': { posterQuality: 'w154', itemsPerPage: 15, enableLazy: true },
+    '3g': { posterQuality: 'w342', itemsPerPage: 20, enableLazy: true },
+    '4g': { posterQuality: 'w500', itemsPerPage: 20, enableLazy: false },
+    'unknown': { posterQuality: 'w342', itemsPerPage: 15, enableLazy: true }
+};
+
 const COUNTRY_CACHE_STORAGE_KEY = 'vortexCountryCache';
 const COUNTRY_CACHE_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 const FOOTER_COUNTRIES_MAX_ITEMS = 30;
@@ -39,6 +57,78 @@ function shuffleArray(arr) {
         [a[i], a[j]] = [a[j], a[i]];
     }
     return a;
+}
+
+// Network connectivity functions
+function updateNetworkInfo() {
+    networkInfo.online = navigator.onLine;
+    
+    // Get connection info if available
+    if ('connection' in navigator) {
+        const conn = navigator.connection;
+        networkInfo.connectionType = conn.type || 'unknown';
+        networkInfo.effectiveType = conn.effectiveType || 'unknown';
+        networkInfo.downlink = conn.downlink || 0;
+        networkInfo.rtt = conn.rtt || 0;
+        
+        // Update items per page based on connection
+        const settings = adaptiveSettings[networkInfo.effectiveType] || adaptiveSettings['unknown'];
+        itemsPerPage = settings.itemsPerPage;
+    }
+    
+    // Update UI based on connection status
+    updateNetworkStatusUI();
+}
+
+function updateNetworkStatusUI() {
+    const statusElement = document.getElementById('network-status');
+    if (statusElement) {
+        if (networkInfo.online) {
+            statusElement.textContent = `Online (${networkInfo.effectiveType.toUpperCase()})`;
+            statusElement.className = 'network-status online';
+        } else {
+            statusElement.textContent = 'Offline';
+            statusElement.className = 'network-status offline';
+        }
+    }
+    
+    // Show/hide offline notifications
+    if (!networkInfo.online) {
+        showNotification('You are offline. Some features may be limited.', 'warning');
+    }
+}
+
+function getAdaptivePosterUrl(basePath) {
+    const settings = adaptiveSettings[networkInfo.effectiveType] || adaptiveSettings['unknown'];
+    return `${TMDB_IMAGE_BASE}${settings.posterQuality}${basePath}`;
+}
+
+function initializeNetworkMonitoring() {
+    // Update initial network info
+    updateNetworkInfo();
+    
+    // Listen for online/offline events
+    window.addEventListener('online', () => {
+        networkInfo.online = true;
+        updateNetworkStatusUI();
+        showNotification('Connection restored', 'success');
+        // Refresh data when coming back online
+        loadInitialData();
+    });
+    
+    window.addEventListener('offline', () => {
+        networkInfo.online = false;
+        updateNetworkStatusUI();
+    });
+    
+    // Listen for connection changes if available
+    if ('connection' in navigator) {
+        navigator.connection.addEventListener('change', () => {
+            updateNetworkInfo();
+            const settings = adaptiveSettings[networkInfo.effectiveType] || adaptiveSettings['unknown'];
+            showNotification(`Connection changed to ${networkInfo.effectiveType.toUpperCase()}`, 'info');
+        });
+    }
 }
 
 async function hydrateCountryCodesForItems(items) {
@@ -453,6 +543,58 @@ function setCachedPoster(type, tmdbId, url) {
     }
 }
 
+// Enhanced search function for better movie/TV show matching
+function enhancedSearchScore(item, searchWords, fullSearchTerm) {
+    const title = (item?.title || '').toLowerCase();
+    const description = (item?.description || '').toLowerCase();
+    const genre = (item?.genre || '').toLowerCase();
+    const year = item?.year ? String(item.year) : '';
+    
+    let score = 0;
+    
+    // Exact title match gets highest score
+    if (title === fullSearchTerm) score += 100;
+    
+    // Title contains full search term
+    if (title.includes(fullSearchTerm)) score += 80;
+    
+    // All search words in title (in order)
+    const titleWords = title.split(' ');
+    let consecutiveMatches = 0;
+    let maxConsecutive = 0;
+    
+    for (let i = 0; i < titleWords.length; i++) {
+        if (searchWords.includes(titleWords[i])) {
+            consecutiveMatches++;
+            maxConsecutive = Math.max(maxConsecutive, consecutiveMatches);
+        } else {
+            consecutiveMatches = 0;
+        }
+    }
+    
+    if (maxConsecutive === searchWords.length) score += 60;
+    else if (maxConsecutive > 1) score += 40;
+    
+    // Individual word matches in title
+    const wordMatches = searchWords.filter(word => title.includes(word)).length;
+    score += wordMatches * 10;
+    
+    // Description matches
+    if (description.includes(fullSearchTerm)) score += 20;
+    const descWordMatches = searchWords.filter(word => description.includes(word)).length;
+    score += descWordMatches * 5;
+    
+    // Genre matches
+    if (genre.includes(fullSearchTerm)) score += 15;
+    const genreWordMatches = searchWords.filter(word => genre.includes(word)).length;
+    score += genreWordMatches * 3;
+    
+    // Year match
+    if (year.includes(fullSearchTerm)) score += 25;
+    
+    return score;
+}
+
 async function performGlobalSearchOnIndex(searchTerm) {
     // Keep the UI responsive: immediately clear grids and show loading
     const moviesGrid = document.getElementById('movies-grid');
@@ -469,37 +611,41 @@ async function performGlobalSearchOnIndex(searchTerm) {
         if (allContent.length === 0) allContent = getFallbackData();
     }
 
-    const searchResults = allContent.filter(item => {
-        const title = (item?.title || '').toLowerCase();
-        const description = (item?.description || '').toLowerCase();
-        const genre = (item?.genre || '').toLowerCase();
-        const year = item?.year ? String(item.year) : '';
-
-        return (
-            title.includes(searchTerm) ||
-            description.includes(searchTerm) ||
-            genre.includes(searchTerm) ||
-            year.includes(searchTerm)
-        );
-    });
+    // Enhanced search with scoring
+    const searchWords = searchTerm.toLowerCase().split(' ').filter(word => word.length > 0);
+    const fullSearchTerm = searchTerm.toLowerCase();
+    
+    const scoredResults = allContent
+        .map(item => ({
+            item,
+            score: enhancedSearchScore(item, searchWords, fullSearchTerm)
+        }))
+        .filter(result => result.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .map(result => result.item);
 
     // Hydrate posters only for what we will render
-    const moviesOnly = searchResults.filter(i => i.type === 'movie').slice(0, 24);
-    const showsOnly = searchResults.filter(i => i.type === 'tv-show').slice(0, 24);
+    const moviesOnly = scoredResults.filter(i => i.type === 'movie').slice(0, 24);
+    const showsOnly = scoredResults.filter(i => i.type === 'tv-show').slice(0, 24);
     await hydratePosters([...moviesOnly, ...showsOnly]);
 
     displaySearchResults([...moviesOnly, ...showsOnly], searchTerm);
 }
 
-async function fetchTmdbPosterUrl(type, tmdbId) {
-    if (!tmdbId) return null;
+async function getPosterUrl(tmdbId, type) {
+    if (!tmdbId || !type) return null;
+    
+    // Check cache first
     const cached = getCachedPoster(type, tmdbId);
     if (cached) return cached;
-
-    if (!TMDB_API_KEY) return null;
-
+    
+    // If offline, return null
+    if (!networkInfo.online) {
+        return null;
+    }
+    
     try {
-        const endpointType = type === 'tv-show' ? 'tv' : 'movie';
+        const endpointType = type === 'movie' ? 'movie' : 'tv';
         const url = `${TMDB_API_BASE}/${endpointType}/${tmdbId}?api_key=${encodeURIComponent(TMDB_API_KEY)}`;
         const response = await fetch(url);
         if (!response.ok) return null;
@@ -507,13 +653,18 @@ async function fetchTmdbPosterUrl(type, tmdbId) {
         const posterPath = data?.poster_path;
         if (!posterPath) return null;
 
-        const posterUrl = `${TMDB_IMAGE_BASE}${posterPath}`;
+        // Use adaptive poster URL based on connection
+        const posterUrl = getAdaptivePosterUrl(posterPath);
+        
+        // Cache the URL
         setCachedPoster(type, tmdbId, posterUrl);
+        
         return posterUrl;
-    } catch (e) {
-        console.warn('TMDB poster fetch failed', e);
+    } catch {
         return null;
     }
+
+    return null;
 }
 
 async function hydratePosters(items) {
@@ -805,14 +956,24 @@ async function loadInitialData() {
     // Start with fallback data immediately so users see content
     loadFallbackData();
     
+    // Only fetch if online
+    if (!networkInfo.online) {
+        console.log('Device is offline, using fallback data only');
+        return;
+    }
+    
     try {
         // Try to fetch real data in background
         console.log('Attempting to fetch real data from API...');
         
-        // Fetch first page of movies and TV shows with more items
+        // Adaptive loading based on connection
+        const settings = adaptiveSettings[networkInfo.effectiveType] || adaptiveSettings['unknown'];
+        const limit = settings.itemsPerPage;
+        
+        // Fetch first page of movies and TV shows with adaptive items
         const [movies, tvShows] = await Promise.all([
-            fetchMovies(1, 20), // Fetch 20 movies
-            fetchTVShows(1, 20) // Fetch 20 TV shows
+            fetchMovies(1, limit),
+            fetchTVShows(1, limit)
         ]);
         
         if (movies.length > 0 || tvShows.length > 0) {
@@ -934,6 +1095,105 @@ function loadFallbackData() {
             }
         ],
         movies: [
+            {
+                id: "tt0232500",
+                title: "The Fast and the Furious",
+                type: "movie",
+                genre: "action",
+                rating: 6.8,
+                year: 2001,
+                description: "Los Angeles street racer Dominic Toretto falls in love with undercover agent Brian O'Conner.",
+                image: "https://images.unsplash.com/photo-1516209650069-8891a1e3e0c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                imdbId: "tt0232500"
+            },
+            {
+                id: "tt0322259",
+                title: "2 Fast 2 Furious",
+                type: "movie",
+                genre: "action",
+                rating: 6.0,
+                year: 2003,
+                description: "Former cop Brian O'Conner teams up with his ex-con pal Roman Pearce to transport a shipment of dirty money for a shady Miami-based import-export dealer.",
+                image: "https://images.unsplash.com/photo-1516209650069-8891a1e3e0c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                imdbId: "tt0322259"
+            },
+            {
+                id: "tt0463946",
+                title: "Fast & Furious",
+                type: "movie",
+                genre: "action",
+                rating: 6.5,
+                year: 2009,
+                description: "Brian O'Conner, now working for the FBI in Los Angeles, teams up with Dominic Toretto again to bring down a drug importer.",
+                image: "https://images.unsplash.com/photo-1516209650069-8891a1e3e0c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                imdbId: "tt0463946"
+            },
+            {
+                id: "tt1596343",
+                title: "Fast Five",
+                type: "movie",
+                genre: "action",
+                rating: 7.3,
+                year: 2011,
+                description: "Dominic Toretto and his crew of street racers plan a massive heist to buy their freedom while in the sights of a formidable Brazilian cop and a dangerous drug lord.",
+                image: "https://images.unsplash.com/photo-1516209650069-8891a1e3e0c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                imdbId: "tt1596343"
+            },
+            {
+                id: "tt1667046",
+                title: "Fast & Furious 6",
+                type: "movie",
+                genre: "action",
+                rating: 7.1,
+                year: 2013,
+                description: "Hobbs has Dominic and Brian reassemble their crew to take down a team of mercenaries: Dominic unexpectedly gets sidetracked when he must let go of someone he loves.",
+                image: "https://images.unsplash.com/photo-1516209650069-8891a1e3e0c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                imdbId: "tt1667046"
+            },
+            {
+                id: "tt2820852",
+                title: "Furious 7",
+                type: "movie",
+                genre: "action",
+                rating: 7.1,
+                year: 2015,
+                description: "Deckard Shaw seeks revenge against Dominic Toretto and his crew for the death of his brother.",
+                image: "https://images.unsplash.com/photo-1516209650069-8891a1e3e0c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                imdbId: "tt2820852"
+            },
+            {
+                id: "tt4630562",
+                title: "The Fate of the Furious",
+                type: "movie",
+                genre: "action",
+                rating: 6.5,
+                year: 2017,
+                description: "When a mysterious woman seduces Dominic into the world of crime and a betrayal of those closest to him, the crew face trials that will test them.",
+                image: "https://images.unsplash.com/photo-1516209650069-8891a1e3e0c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                imdbId: "tt4630562"
+            },
+            {
+                id: "tt6856242",
+                title: "F9: The Fast Saga",
+                type: "movie",
+                genre: "action",
+                rating: 5.2,
+                year: 2021,
+                description: "Dominic Toretto and his crew are confronted by a new villain who is his younger brother, Jakob.",
+                image: "https://images.unsplash.com/photo-1516209650069-8891a1e3e0c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                imdbId: "tt6856242"
+            },
+            {
+                id: "tt5433138",
+                title: "Fast X",
+                type: "movie",
+                genre: "action",
+                rating: 5.8,
+                year: 2023,
+                description: "Dom Toretto and his family are targeted by the vengeful son of drug kingpin Hernan Reyes.",
+                image: "https://images.unsplash.com/photo-1516209650069-8891a1e3e0c6?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=80",
+                imdbId: "tt5433138"
+            },
             {
                 id: "tt1375666",
                 title: "Inception",
@@ -2647,21 +2907,31 @@ document.addEventListener('keydown', (e) => {
     }
 });
 
-// Lazy loading for images
+// Lazy loading for images with network awareness
 if ('IntersectionObserver' in window) {
-    const imageObserver = new IntersectionObserver((entries, observer) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const img = entry.target;
-                img.src = img.src; // Trigger load
-                observer.unobserve(img);
-            }
-        });
-    });
+    const settings = adaptiveSettings[networkInfo.effectiveType] || adaptiveSettings['unknown'];
     
-    document.querySelectorAll('img[loading="lazy"]').forEach(img => {
-        imageObserver.observe(img);
-    });
+    // Enable lazy loading based on connection type
+    if (settings.enableLazy) {
+        const imageObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const img = entry.target;
+                    img.src = img.src; // Trigger load
+                    observer.unobserve(img);
+                }
+            });
+        });
+        
+        document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+            imageObserver.observe(img);
+        });
+    } else {
+        // For fast connections, load all images immediately
+        document.querySelectorAll('img[loading="lazy"]').forEach(img => {
+            img.loading = 'eager';
+        });
+    }
 }
 
 // Performance optimization: Debounce scroll events
@@ -2681,3 +2951,15 @@ function debounce(func, wait) {
 window.addEventListener('scroll', debounce(() => {
     // Scroll-related operations
 }, 100));
+
+// Initialize network monitoring when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    initializeNetworkMonitoring();
+});
+
+// Initialize network monitoring immediately if DOM is already loaded
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initializeNetworkMonitoring);
+} else {
+    initializeNetworkMonitoring();
+}
